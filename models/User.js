@@ -12,25 +12,14 @@ const userSchema = new Schema({
     required: true,
     unique: true,
   },
-  country: {
-    type: String,
-    required: true,
-  },
-  city: {
-    type: String,
-    required: true,
-  },
-  phone: {
-    type: String,
-    required: true,
-  },
-  img: {
-    type: String,
-  },
   password: {
     type: String,
     required: true,
   },
+  country: String,
+  city: String,
+  phone: String,
+  img: String,
   isAdmin: {
     type: Boolean,
     default: false,

@@ -3,7 +3,11 @@ import Hotel from '../models/Hotel.js'
 
 export const createRoom = async (req, res) => {
   try {
-    const newRoom = new Room(req.body)
+    const roomNumbers = req.body.roomNumbers.split(",").map(number=> {
+      return { number }
+    })
+
+    const newRoom = new Room({...req.body, roomNumbers})
 
     const savedRoom = await newRoom.save()
 

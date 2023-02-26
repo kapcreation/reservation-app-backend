@@ -7,14 +7,23 @@ export const register = async (req, res) => {
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(req.body.password, salt);
 
+    const existingUser = await User.find({ username: req.body.username })
+
+    if (existingUser.length > 0) return res.status(409).json("User already exist!")
+
     const newUser = new User({
-      ...req.body,
+      username: req.body.username,
+      email: req.body.email,
       password: hash,
     })
 
-    await newUser.save()
+    const savedUser = await newUser.save()
 
-    res.status(200).json("User has been created!")
+    const token = jwt.sign({ id: savedUser._id, isAdmin: savedUser.isAdmin }, process.env.JWT_SECRET)
+
+    const { password, ...otherDetails } = savedUser._doc
+
+    res.status(200).json({ ...otherDetails, token })
   } catch (error) {
     res.status(500).json(error.message)
   }
